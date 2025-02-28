@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Order #{{ order.id }}</h2>
+
+<div class="order-items">
+    {% for item in order.items.all %}
+    <div class="item">
+        <h3>{{ item.name }}</h3>
+        <p>{{ item.description }}</p>
+        <p>Price: ${{ item.get_display_price }}</p>
+    </div>
+    {% endfor %}
+</div>
+
+<div class="total">
+    <h3>Total: ${{ order.total_amount|floatformat:2 }}</h3>
+</div>
+
+<button id="checkout-button">Checkout</button>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+    const stripe = Stripe('{{ stripe_public_key }}');
+    const checkoutButton = document.getElementById('checkout-button');
+
+    checkoutButton.addEventListener('click', function() {
+        fetch('/order/{{ order.id }}/checkout/', {
+            method: 'GET',
+        })
+        .then(response => response.json())
+        .then(session => stripe.redirectToCheckout({ sessionId: session.id }))
+        .catch(function(error) {
+            console.error('Error:', error);
+        });
+    });
+</script>
+{% endblock %}
