@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <h1>Добро пожаловать в наш магазин!</h1>
+    <h2>Доступные автомобили:</h2>
+    <ul>
+    {% for item in items %}
+        <li>
+            <a href="{% url 'item-detail' item.id %}">
+                {{ item.name }} - ${{ item.get_display_price }}
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}

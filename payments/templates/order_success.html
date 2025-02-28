@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="success-message">
+    <h2>Payment Successful!</h2>
+    <h3>Order #{{ order.id }}</h3>
+
+    <div class="order-details">
+        <h4>Order Items:</h4>
+        <ul>
+        {% for item in order.items.all %}
+            <li>{{ item.name }} - ${{ item.get_display_price }}</li>
+        {% endfor %}
+        </ul>
+
+        <p class="total">Total paid: ${{ order.total_amount|floatformat:2 }}</p>
+    </div>
+
+    <a href="{% url 'home' %}" class="button">Home</a>
+</div>
+{% endblock %}
